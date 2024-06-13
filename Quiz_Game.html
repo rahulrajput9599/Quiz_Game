@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance and Economics Quiz Game</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap');
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(to right, #8e2de2, #4a00e0);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .quiz-container {
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+            width: 600px;
+            max-width: 95%;
+            text-align: center;
+            padding: 40px;
+            margin: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 2px solid #ff416c;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quiz-container:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 0 60px rgba(0, 0, 0, 0.7);
+        }
+
+        .quiz-header {
+            margin-bottom: 30px;
+        }
+
+        .quiz-header h2 {
+            margin: 0;
+            padding: 0;
+            color: #333;
+            font-size: 28px;
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul li {
+            margin: 15px 0;
+        }
+
+        ul li label {
+            display: block;
+            padding: 20px;
+            border-radius: 10px;
+            background: #f4f4f4;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: background 0.3s, border 0.3s, transform 0.3s;
+        }
+
+        ul li label:hover {
+            background: #e0e0e0;
+            transform: translateX(5px);
+        }
+
+        ul li input[type="radio"] {
+            display: none;
+        }
+
+        ul li input[type="radio"]:checked+label {
+            background: #d1e7fd;
+            border-color: #007bff;
+            transform: scale(1.05);
+        }
+
+        button {
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            cursor: pointer;
+            border-radius: 25px;
+            font-size: 18px;
+            transition: background 0.3s ease, transform 0.3s ease;
+            margin: 10px;
+        }
+
+        button:hover {
+            background: linear-gradient(to right, #ff4b2b, #ff416c);
+            transform: translateY(-3px);
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        .result {
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .result h2 {
+            color: #333;
+            font-size: 28px;
+        }
+
+        .result button {
+            margin-top: 20px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            z-index: 9999;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 30px;
+            background: #ff7e5f;
+            animation: fall 2s linear infinite;
+            opacity: 0;
+        }
+
+        .confetti:nth-child(odd) {
+            background: #feb47b;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100vh);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .correct {
+            background-color: #d4edda !important;
+            border-color: #28a745 !important;
+        }
+
+        .incorrect {
+            background-color: #f8d7da !important;
+            border-color: #dc3545 !important;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Shake effect */
+        .shake {
+            animation: shake 0.5s;
+            animation-timing-function: ease-in-out;
+        }
+
+        @keyframes shake {
+            0% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-10px);
+            }
+
+            50% {
+                transform: translateX(10px);
+            }
+
+            75% {
+                transform: translateX(-10px);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="quiz-container" id="quiz">
+        <div class="quiz-header">
+            <h2 id="question">Question text</h2>
+            <ul>
+                <li>
+                    <input type="radio" name="answer" id="a" class="answer">
+                    <label for="a" id="a_text">Answer</label>
+                </li>
+                <li>
+                    <input type="radio" name="answer" id="b" class="answer">
+                    <label for="b" id="b_text">Answer</label>
+                </li>
+                <li>
+                    <input type="radio" name="answer" id="c" class="answer">
+                    <label for="c" id="c_text">Answer</label>
+                </li>
+                <li>
+                    <input type="radio" name="answer" id="d" class="answer">
+                    <label for="d" id="d_text">Answer</label>
+                </li>
+            </ul>
+        </div>
+        <div class="btn-container">
+            <button id="submit">Submit</button>
+            <button id="next" class="hidden">Next</button>
+        </div>
+    </div>
+    <div class="celebration" id="celebration" style="display: none;">
+        <!-- Confetti elements will be generated here -->
+    </div>
+
+    <!-- Audio elements for sound effects -->
+    <audio id="correct-sound" src="https://www.soundjay.com/button/sounds/button-16.mp3"></audio>
+    <audio id="incorrect-sound" src="https://www.soundjay.com/button/sounds/button-10.mp3"></audio>
+
+    <script>
+        const quizData = [
+            {
+                question: "What does GDP stand for?",
+                a: "Gross Domestic Product",
+                b: "General Domestic Product",
+                c: "Gross Domestic Profit",
+                d: "General Domestic Profit",
+                correct: "a"
+            },
+            {
+                question: "What is inflation?",
+                a: "Decrease in the general price level of goods and services",
+                b: "Increase in the general price level of goods and services",
+                c: "Stable price level of goods and services",
+                d: "None of the above",
+                correct: "b"
+            },
+            {
+                question: "What is a stock?",
+                a: "A fixed-income investment",
+                b: "A share in the ownership of a company",
+                c: "A type of bond",
+                d: "A form of insurance",
+                correct: "b"
+            },
+            {
+                question: "What is a recession?",
+                a: "A period of economic growth",
+                b: "A period of economic decline",
+                c: "A period of stable economy",
+                d: "A period of high inflation",
+                correct: "b"
+            }
+        ];
+
+        const quiz = document.getElementById("quiz");
+        const answerEls = document.querySelectorAll(".answer");
+        const questionEl = document.getElementById("question");
+        const a_text = document.getElementById("a_text");
+        const b_text = document.getElementById("b_text");
+        const c_text = document.getElementById("c_text");
+        const d_text = document.getElementById("d_text");
+        const submitBtn = document.getElementById("submit");
+        const nextBtn = document.getElementById("next");
+        const celebrationEl = document.getElementById("celebration");
+
+        const correctSound = document.getElementById("correct-sound");
+        const incorrectSound = document.getElementById("incorrect-sound");
+
+        let currentQuiz = 0;
+        let score = 0;
+
+        loadQuiz();
+
+        function loadQuiz() {
+            deselectAnswers();
+            clearColors();
+
+            const currentQuizData = quizData[currentQuiz];
+
+            questionEl.innerText = currentQuizData.question;
+            a_text.innerText = currentQuizData.a;
+            b_text.innerText = currentQuizData.b;
+            c_text.innerText = currentQuizData.c;
+            d_text.innerText = currentQuizData.d;
+
+            submitBtn.classList.remove("hidden");
+            nextBtn.classList.add("hidden");
+        }
+
+        function deselectAnswers() {
+            answerEls.forEach(answerEl => answerEl.checked = false);
+        }
+
+        function clearColors() {
+            document.querySelectorAll('label').forEach(label => {
+                label.classList.remove('correct', 'incorrect');
+            });
+        }
+
+        function getSelected() {
+            let answer;
+            answerEls.forEach(answerEl => {
+                if (answerEl.checked) {
+                    answer = answerEl.id;
+                }
+            });
+            return answer;
+        }
+
+        function showCelebration() {
+            celebrationEl.style.display = 'flex';
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = `${Math.random() * 100}vw`;
+                confetti.style.animationDelay = `${Math.random() * 2}s`;
+                celebrationEl.appendChild(confetti);
+            }
+            setTimeout(() => celebrationEl.style.display = 'none', 4000);
+        }
+
+        submitBtn.addEventListener("click", () => {
+            const answer = getSelected();
+            if (answer) {
+                const correctAnswer = quizData[currentQuiz].correct;
+
+                if (answer === correctAnswer) {
+                    score++;
+                    document.querySelector(`label[for=${answer}]`).classList.add('correct');
+                    correctSound.play(); // Play correct answer sound
+                } else {
+                    document.querySelector(`label[for=${answer}]`).classList.add('incorrect');
+                    document.querySelector(`label[for=${correctAnswer}]`).classList.add('correct');
+                    incorrectSound.play(); // Play incorrect answer sound
+                    quiz.classList.add('shake'); // Add shake effect
+                    setTimeout(() => quiz.classList.remove('shake'), 500); // Remove shake effect after animation
+                }
+
+                submitBtn.classList.add("hidden");
+                nextBtn.classList.remove("hidden");
+            }
+        });
+
+        nextBtn.addEventListener("click", () => {
+            currentQuiz++;
+
+            if (currentQuiz < quizData.length) {
+                loadQuiz();
+            } else {
+                if (score === quizData.length) {
+                    showCelebration();
+                }
+                quiz.innerHTML = `
+                    <div class="result">
+                        <h2>You answered ${score}/${quizData.length} questions correctly</h2>
+                        <button onclick="location.reload()">Reload</button>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+
+</html>
